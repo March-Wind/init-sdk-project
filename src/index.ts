@@ -50,12 +50,7 @@ const tasks = new Listr<Ctx>(
 
                 return new Promise((resolve, reject) => {
                     const vscodeConfig = path.resolve(process.cwd(), '.vscode/settings.json');
-                    let fileStat = null;
-                    try{
-                        fileStat = fs.statSync(vscodeConfig);
-                    }catch(error){
-                      
-                    }
+                    const fileStat = fs.statSync(vscodeConfig);
                     let configObj = {};
                     if (fileStat && fileStat.isFile()) {
                         const configString = fs.readFileSync(vscodeConfig, { encoding: 'utf8' });
@@ -68,6 +63,8 @@ const tasks = new Listr<Ctx>(
                             ...vscode,
                             ...configObj,
                         }
+                    }else{
+                        fs.mkdirSync('.vscode')
                     }
                     fs.writeFileSync(vscodeConfig, JSON.stringify(configObj, null, 4), { encoding: 'utf-8' });
                     resolve(undefined)
