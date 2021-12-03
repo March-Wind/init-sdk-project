@@ -1,0 +1,21 @@
+{
+    "ts-node": {
+        "transpileOnly": true,
+    },
+    "compilerOptions": {
+        "outDir": "lib",
+        "sourceMap": false,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+        "allowJs": true,
+        "target": "esnext",
+        "module": "esnext"
+    },
+    "exclude": [
+        "node_modules/**/*"
+    ],
+    "includes": [
+        "**/global.d.ts"
+    ]
+}

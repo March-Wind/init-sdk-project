@@ -24,7 +24,7 @@ const tasks = new Listr<Ctx>(
         {
             title: 'copy .eslintrc file',
             task:() => {
-                return execa('cp',[path.resolve(__dirname,'../.eslintrc.js'), process.cwd()])
+                return execa('cp',[path.resolve(__dirname,'./.eslintrc.js'), process.cwd()])
             }
         }
     ],

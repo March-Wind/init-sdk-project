@@ -11,8 +11,7 @@
     "outDir": "./lib",
     "jsx": "react",
     "baseUrl": "./",
-    "skipLibCheck": true,
-    "types": ["svelte", "node"]
+    "skipLibCheck": true
   },
   "exclude": ["node_modules", "lib"],
   "include": ["**/*"]

@@ -1,13 +1,14 @@
 {
-  "name": "sdk-template",
-  "version": "1.0.0",
+  "name": "@marchyang/init-eslint",
+  "version": "1.0.9",
   "description": "",
-  "main": "lib/index.js",
-  "type": "commonjs",
+  "main": "./lib/index.js",
+  "bin": "./lib/index.js",
   "scripts": {
-    "build": "tsc && a=1 rollup -c",
-    "b": " rollup -c",
-    "pub": "git add . && git commit -m 'publish' && git push && npm run build && npm publish"
+    "build": "tsc && rollup -c && cp ./.eslintrc.js ./lib/",
+    "ts:run": "TS_NODE_PROJECT=./tsconfig_debugger/tsconfig.json node --loader ts-node/esm ./src/index.ts",
+    "ts:debugger": "TS_NODE_PROJECT=./tsconfig_debugger/tsconfig.json node --inspect-brk  --loader ts-node/esm  ./src/index.ts",
+    "prepublish": "npm run build"
   },
   "files": [
     "lib/*",
@@ -25,20 +26,17 @@
     "rollup": "^2.57.0",
     "rollup-plugin-postcss": "^4.0.1",
     "rollup-plugin-typescript": "^1.0.1",
+    "ts-node": "^10.4.0",
     "tslib": "^2.3.1",
     "typescript": "^4.4.3"
   },
   "dependencies": {
     "@marchyang/execa": "^6.0.1",
     "@rollup/plugin-commonjs": "^21.0.1",
-    "@xmly/ace-utils": "0.0.23",
-    "@xmly/arouse": "^0.1.23",
     "listr2": "^3.13.5",
     "react": "^17.0.2",
     "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-externals": "^2.2.0",
-    "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-node-resolve": "^5.2.0"
   }
 }
