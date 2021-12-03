@@ -14,7 +14,8 @@ export default {
         format: 'cjs',
         globals: {
             react: 'React'
-        }
+        },
+        banner: '#!/usr/bin/env node'
     },
     plugins: [
         nodeExternals(),

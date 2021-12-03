@@ -1,21 +1,13 @@
 {
     "ts-node": {
-        "transpileOnly": true,
+        "transpileOnly": true
     },
     "compilerOptions": {
-        "outDir": "lib",
-        "sourceMap": false,
+        "target": "ES6",
+        // 编译为哪种模块系统。如果target为"ES3"或者"ES5"，默认为"CommonJS"，否则默认为"ES6"
+        // "module": "CommonJS",
         "allowSyntheticDefaultImports": true,
-        "esModuleInterop": true,
-        "moduleResolution": "node",
-        "allowJs": true,
-        "target": "esnext",
-        "module": "esnext"
+        "esModuleInterop": true, // 是否支持使用import cjs from 'cjs'的方式引入commonjs包
     },
-    "exclude": [
-        "node_modules/**/*"
-    ],
-    "includes": [
-        "**/global.d.ts"
-    ]
+    "include": ["node_modules"]
 }
