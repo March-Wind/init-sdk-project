@@ -1,18 +1,24 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "esnext",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "target": "es2015",
+    "target": "esnext",
     "sourceMap": false,
     "outDir": "./lib",
     "jsx": "react",
     "baseUrl": "./",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "moduleResolution": "node"
   },
-  "exclude": ["node_modules", "lib"],
-  "include": ["**/*"]
+  "exclude": [
+    "node_modules",
+    "lib"
+  ],
+  "include": [
+    "**/*"
+  ]
 }

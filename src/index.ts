@@ -1,8 +1,10 @@
 import { Listr } from 'listr2'
 import { execa } from '@marchyang/execa'
-import path from 'path';
 import fs from 'fs';
-
+import { fileURLToPath } from 'url';
+import path, { dirname } from 'path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const vscode = {
     "eslint.validate": [
         "javascript",
@@ -15,7 +17,7 @@ const vscode = {
     },
     "editor.tabSize": 4,
     "eslint.options": {
-        "configFile": ".eslintrc.js"
+        "overrideConfigFile": ".eslintrc.js", // 新版本是overrideConfigFile，旧版本是configFile
     }
 }
 interface Ctx {
@@ -63,7 +65,7 @@ const tasks = new Listr<Ctx>(
                             ...vscode,
                             ...configObj,
                         }
-                    }else{
+                    } else {
                         fs.mkdirSync('.vscode')
                     }
                     fs.writeFileSync(vscodeConfig, JSON.stringify(configObj, null, 4), { encoding: 'utf-8' });
@@ -83,3 +85,5 @@ try {
 } catch (e) {
     console.error(e)
 }
+
+var a = 1;

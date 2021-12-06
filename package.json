@@ -1,6 +1,6 @@
 {
   "name": "@marchyang/init-eslint",
-  "version": "1.1.5",
+  "version": "1.1.7",
   "description": "",
   "main": "./lib/index.js",
   "bin": "./lib/index.js",
@@ -9,7 +9,8 @@
     "build": "tsc && rollup -c && cp ./.eslintrc.js ./lib/",
     "ts:run": "TS_NODE_PROJECT=./tsconfig_debugger/tsconfig.json node --loader ts-node/esm ./src/index.ts",
     "ts:debugger": "TS_NODE_PROJECT=./tsconfig_debugger/tsconfig.json node --inspect-brk  --loader ts-node/esm  ./src/index.ts",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build && npm run removeType",
+    "removeType": "TS_NODE_PROJECT=./tsconfig_debugger/tsconfig.json node --loader ts-node/esm removeType.ts"
   },
   "files": [
     "lib/*",
