@@ -1,4 +1,11 @@
 {
+  "ts-node": {
+    "transpileOnly": true,
+    "moduleTypes": {
+      "src/**/*": "esm",
+      "src": "esm"
+    }
+  },
   "compilerOptions": {
     "module": "esnext",
     "declaration": true,
