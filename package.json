@@ -4,6 +4,7 @@
   "description": "",
   "main": "./lib/index.js",
   "bin": "./lib/index.js",
+  "type": "module",
   "scripts": {
     "build": "tsc && rollup -c && cp ./.eslintrc.js ./lib/",
     "ts:run": "TS_NODE_PROJECT=./tsconfig_debugger/tsconfig.json node --loader ts-node/esm ./src/index.ts",
