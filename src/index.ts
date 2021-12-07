@@ -1,25 +1,10 @@
 import { Listr } from 'listr2'
-import { execa } from '@marchyang/execa'
+import { execaSync, execa } from '@marchyang/execa'
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const vscode = {
-    "eslint.validate": [
-        "javascript",
-        "javascriptreact",
-        "typescript"
-    ],
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
-    },
-    "editor.tabSize": 4,
-    "eslint.options": {
-        "overrideConfigFile": ".eslintrc.js", // 新版本是overrideConfigFile，旧版本是configFile
-    }
-}
 interface Ctx {
     /* some variables for internal use */
 }
@@ -27,57 +12,81 @@ interface Ctx {
 const tasks = new Listr<Ctx>(
     [
         {
-            title: 'Install dependent packages',
-            task: () => {
-                return execa('npm', ['install',
-                    'eslint',
-                    'babel-eslint',
-                    '@typescript-eslint/eslint-plugin',
-                    '@typescript-eslint/parser',
-                    'eslint-plugin-react',
-                    'eslint-plugin-react-hooks',
-                    'jsx-control-statements'
-                ])
-            }
-        },
-        {
-            title: 'copy .eslintrc file',
-            task: () => {
-                return execa('cp', [path.resolve(__dirname, './.eslintrc.js'), process.cwd()])
-            }
-        },
-        {
-            title: 'set vscode config',
-            task: () => {
-
-                return new Promise((resolve, reject) => {
-                    const vscodeConfig = path.resolve(process.cwd(), '.vscode/settings.json');
-                    let fileStat = null;
-                    try {
-                        fileStat = fs.statSync(vscodeConfig);
-                    } catch (err) {
-
-                    }
-                    let configObj = {
-                        ...vscode
-                    };
-                    if (fileStat && fileStat.isFile()) {
-                        const configString = fs.readFileSync(vscodeConfig, { encoding: 'utf8' });
-                        try {
-                            configObj = JSON.parse(configString);
-                        } catch (error) {
-                            reject('.vscode/settings.json 解析错误！')
-                        }
-                        configObj = {
-                            ...vscode,
-                            ...configObj,
-                        }
-                    } else {
-                        fs.mkdirSync('.vscode')
-                    }
-                    fs.writeFileSync(vscodeConfig, JSON.stringify(configObj, null, 4), { encoding: 'utf-8' });
-                    resolve(undefined)
+            title: 'npm init',
+            task: (ctx, task) => {
+                const instance = execaSync('npm', ['init'],
+                { 
+                    stdio: 'inherit', 
+                    shell: true,
                 })
+            },
+            options: { persistentOutput: true }
+        },
+        {
+            title: 'install packages',
+            task: (ctx,task) => {
+                return task.newListr([
+                    {
+                        title: 'install devDependencies package',
+                        task: () => {
+                            return execa('npm', ['i', '-D',
+                                '@rollup/plugin-image',
+                                'rollup-plugin-commonjs',
+                                'rollup-plugin-node-externals',
+                                'rollup-plugin-node-resolve',
+                                '@types/node',
+                                '@types/react',
+                                'less',
+                                'postcss',
+                                'rollup',
+                                'rollup-plugin-postcss',
+                                'rollup-plugin-typescript',
+                                'ts-node',
+                                'tslib',
+                                'typescript'
+                            ]);
+                        }
+                    },
+                    {
+                        title: 'install dependencies package',
+                        task: () => {
+                            return execa('npm', ['i', 
+                                'react'
+                            ]);
+                        }
+                    }
+                ])
+                
+            }
+        },
+        {
+            title: 'set script and main ',
+            task: () => {
+                const packagePath = path.resolve(process.cwd(), './package.json');
+
+                const configString = fs.readFileSync(packagePath, { encoding: 'utf8' });
+                let configObj:any = {};
+                try {
+                    configObj = JSON.parse(configString);
+                } catch (error) {
+                    throw new Error('package.json 解析错误！')
+                }
+                configObj.script = {
+                    "build": "tsc && rollup -c && cp ./.eslintrc.js ./lib/",
+                    "ts:run": "TS_NODE_PROJECT=./tsconfig.json node --loader ts-node/esm ./src/index.ts",
+                    "ts:debugger": "TS_NODE_PROJECT=./tsconfig.json node --inspect-brk  --loader ts-node/esm  ./src/index.ts",
+                    "prepublish": "npm run build "
+                }
+                configObj.main = {
+                    "main": "./lib/index.js",
+                }
+                fs.writeFileSync(packagePath, JSON.stringify(configObj, null, 4), { encoding: 'utf-8' });
+            }
+        },
+        {
+            title: 'set tsconfig',
+            task: () => {
+                return execa('cp',  [path.resolve(__dirname, './tsconfig.json'), process.cwd()])
             }
         }
     ],
@@ -92,5 +101,3 @@ try {
 } catch (e) {
     console.error(e)
 }
-
-var a = 1;
