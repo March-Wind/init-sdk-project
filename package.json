@@ -1,6 +1,6 @@
 {
   "name": "@marchyang/init-sdk-project",
-  "version": "1.0.2",
+  "version": "1.0.6",
   "description": "",
   "main": "./lib/index.js",
   "bin": "./lib/index.js",
@@ -8,7 +8,8 @@
     "build": "tsc && rollup -c",
     "ts:run": "TS_NODE_PROJECT=./tsconfig.json node --loader ts-node/esm ./src/index.ts",
     "ts:debugger": "TS_NODE_PROJECT=./tsconfig.json node --inspect-brk  --loader ts-node/esm  ./src/index.ts",
-    "prepublish": "npm run build && cp ./tsconfig.json ./lib/ && cp -r ./src/template ./lib"
+    "copyFile": "cp ./tsconfig.json ./lib/ && cp -r ./src/template ./lib && cp ./rollup.config.js ./lib/ && cp ./rollup.config.js ./lib/  && cp ./.npmignore ./lib/",
+    "prepublish": "npm run build && npm run copyFile"
   },
   "files": [
     "lib/*",

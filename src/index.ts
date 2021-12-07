@@ -77,14 +77,42 @@ const tasks = new Listr<Ctx>(
                     "ts:debugger": "TS_NODE_PROJECT=./tsconfig.json node --inspect-brk  --loader ts-node/esm  ./src/index.ts",
                     "prepublish": "npm run build "
                 }
-                configObj.main = "./lib/index.js"
+                configObj.main = "./lib/index.js";
+                configObj.files = [
+                    "lib/*",
+                    "*.md",
+                    "package.json"
+                  ]
                 fs.writeFileSync(packagePath, JSON.stringify(configObj, null, 4), { encoding: 'utf-8' });
             }
         },
         {
-            title: 'Set tsconfig',
-            task: () => {
-                return execa('cp',  [path.resolve(__dirname, './tsconfig.json'), process.cwd()])
+            title: 'copy file',
+            task: (ctx, task) => {
+                return task.newListr([
+                    {
+                        title: 'set tsconfig',
+                        task: () => execa('cp',  [path.resolve(__dirname, './tsconfig.json'), process.cwd()])
+                    },
+                    {
+                        title: 'set rollup config',
+                        task: () => execa('cp',  [path.resolve(__dirname, './rollup.config.js'), process.cwd()])
+                    },
+                    {
+                        title: 'set .gitignore',
+                        task: () => {
+                            fs.writeFileSync(path.resolve(process.cwd(), './.gitignore'), 
+                            `/node_modules
+                            /lib
+                            .DS_Store`)
+                        }
+                    },
+                    {
+                        title: 'set .npmignore',
+                        task: () => execa('cp',  [path.resolve(__dirname, './.npmignore'), process.cwd()])
+                    }
+                ])
+                 
             }
         },
         {
