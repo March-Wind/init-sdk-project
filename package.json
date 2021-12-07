@@ -1,14 +1,14 @@
 {
   "name": "@marchyang/init-sdk-project",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
   "main": "./lib/index.js",
   "bin": "./lib/index.js",
   "scripts": {
-    "build": "tsc && rollup -c && cp ./.eslintrc.js ./lib/",
+    "build": "tsc && rollup -c",
     "ts:run": "TS_NODE_PROJECT=./tsconfig.json node --loader ts-node/esm ./src/index.ts",
     "ts:debugger": "TS_NODE_PROJECT=./tsconfig.json node --inspect-brk  --loader ts-node/esm  ./src/index.ts",
-    "prepublish": "npm run build && cp ./tsconfig.json ./lib/"
+    "prepublish": "npm run build && cp ./tsconfig.json ./lib/ && cp -r ./src/template ./lib"
   },
   "files": [
     "lib/*",

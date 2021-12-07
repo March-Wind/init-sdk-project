@@ -23,7 +23,7 @@ const tasks = new Listr<Ctx>(
             options: { persistentOutput: true }
         },
         {
-            title: 'install packages',
+            title: 'Install packages',
             task: (ctx,task) => {
                 return task.newListr([
                     {
@@ -60,7 +60,7 @@ const tasks = new Listr<Ctx>(
             }
         },
         {
-            title: 'set script and main ',
+            title: 'Set script and main ',
             task: () => {
                 const packagePath = path.resolve(process.cwd(), './package.json');
 
@@ -71,22 +71,27 @@ const tasks = new Listr<Ctx>(
                 } catch (error) {
                     throw new Error('package.json 解析错误！')
                 }
-                configObj.script = {
-                    "build": "tsc && rollup -c && cp ./.eslintrc.js ./lib/",
+                configObj.scripts = {
+                    "build": "tsc && rollup -c",
                     "ts:run": "TS_NODE_PROJECT=./tsconfig.json node --loader ts-node/esm ./src/index.ts",
                     "ts:debugger": "TS_NODE_PROJECT=./tsconfig.json node --inspect-brk  --loader ts-node/esm  ./src/index.ts",
                     "prepublish": "npm run build "
                 }
-                configObj.main = {
-                    "main": "./lib/index.js",
-                }
+                configObj.main = "./lib/index.js"
                 fs.writeFileSync(packagePath, JSON.stringify(configObj, null, 4), { encoding: 'utf-8' });
             }
         },
         {
-            title: 'set tsconfig',
+            title: 'Set tsconfig',
             task: () => {
                 return execa('cp',  [path.resolve(__dirname, './tsconfig.json'), process.cwd()])
+            }
+        },
+        {
+            title: 'New src directory',
+            task: () => {
+                fs.mkdirSync('src')
+                execaSync('cp',[path.resolve(__dirname, './template/index.ts'), path.resolve(process.cwd(),'src')])
             }
         }
     ],
